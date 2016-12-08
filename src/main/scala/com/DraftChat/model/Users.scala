@@ -1,9 +1,11 @@
 package com.DraftChat.model
 
-import slick.lifted.{Index, ProvenShape}
 import slick.driver.PostgresDriver.api._
+import slick.lifted.{Index, ProvenShape}
 
-class User(tag: Tag) extends Table[(Int, String, String, String)](tag, "User") {
+case class User(login: String, passHash: String, name: String, id: Option[Int] = None)
+
+class Users(tag: Tag) extends Table[User](tag, "User") {
   def id: Rep[Int] = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
   def login: Rep[String] = column[String]("login")
@@ -14,5 +16,5 @@ class User(tag: Tag) extends Table[(Int, String, String, String)](tag, "User") {
 
   def idxLogin: Index = index("idxLogin", login, unique = true)
 
-  override def * : ProvenShape[(Int, String, String, String)] = (id, login, passHash, name)
+  def * : ProvenShape[User] = (login, passHash, name, id.?) <> (User.tupled, User.unapply)
 }

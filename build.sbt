@@ -28,7 +28,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick" % "3.0.0",
   "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
   "com.zaxxer" % "HikariCP" % "2.5.1",
-  "org.scalatest" % "scalatest_2.11" % "3.0.1"
+  "org.scalatest" % "scalatest_2.11" % "3.0.1",
+  "com.google.code.gson" % "gson" % "2.8.0"
 )
 
 scalateTemplateConfig in Compile := {
