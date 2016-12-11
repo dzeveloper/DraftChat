@@ -2,11 +2,12 @@ package com.DraftChat
 
 import java.sql.Timestamp
 
-import com.DraftChat.gson.IdSerializer
+import com.DraftChat.json.MessageSerializer
 import com.DraftChat.model.{Message, Messages, User, Users}
-import com.google.gson.GsonBuilder
+import com.DraftChat.service.UserService
 import org.scalatest.FunSuite
 import slick.driver.PostgresDriver.api._
+import spray.json.DefaultJsonProtocol._
 
 import scala.concurrent._
 import scala.concurrent.duration.Duration
@@ -24,13 +25,13 @@ class InitTest extends FunSuite {
 
     val fillAction = DBIO.seq(
       users ++= Seq(
-        User("admin", "what is hash", "ADMIN"),
-        User("user", "baby don't hurt me", "user")
+        User("admin", UserService.getHash("admin"), "ADMIN"),
+        User("user", UserService.getHash("user"), "user")
       ),
       messages ++= Seq(
-        Message(new Timestamp(time), 1, "HELLO EVERYBODY"),
-        Message(new Timestamp(time + 3000), 1, "HELLO user"),
-        Message(new Timestamp(time + 15000), 2, "HELLO admin")
+        Message(new Timestamp(System.currentTimeMillis()), 1, "HELLO EVERYBODY"),
+        Message(new Timestamp(System.currentTimeMillis() + 3000), 1, "HELLO user"),
+        Message(new Timestamp(System.currentTimeMillis() + 15000), 2, "HELLO admin")
       )
     )
     Await.result(db.run(fillAction), Duration.Inf)
@@ -50,16 +51,16 @@ class InitTest extends FunSuite {
     println(result)
   }
 
-  test("JSON serializer test") {
+  test("serializer test") {
     val db = Database.forConfig("mydb")
 
     val messages = TableQuery[Messages]
 
-    val result = scala.collection.JavaConversions.seqAsJavaList(
-      Await.result(db.run(messages.result), Duration.Inf))
+    val messagesQuery = for {
+      mes <- messages
+      author <- mes.author
+    } yield (mes, author)
 
-    val gsonBuilder = new GsonBuilder
-    gsonBuilder.registerTypeAdapter(classOf[Option[Any]], new IdSerializer)
-    println(gsonBuilder.setPrettyPrinting().create.toJson(result))
+    println(MessageSerializer.serialize(Await.result(db.run(messagesQuery.result), Duration.Inf)).toJson.prettyPrint)
   }
 }
