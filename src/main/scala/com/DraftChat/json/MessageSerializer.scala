@@ -17,12 +17,9 @@ object MessageSerializer {
     }
   }
 
-  def serialize(messages: Seq[(Messages#TableElementType, Users#TableElementType)]): Seq[JsObject] = {
-    val jsElems = messages.map(elem =>
-      JsObject(Map("message" -> JsString(elem._1.message),
-        "author" -> JsString(elem._2.name),
-        "login" -> JsString(elem._2.login),
-        "timestamp" -> JsNumber(elem._1.timestamp.getTime))))
-    jsElems
-  }
+  def serialize(messages: Seq[(Messages#TableElementType, Users#TableElementType)]): Seq[JsObject] = messages.map(elem =>
+    JsObject(Map("message" -> JsString(elem._1.message),
+      "author" -> JsString(elem._2.name),
+      "login" -> JsString(elem._2.login),
+      "timestamp" -> JsNumber(elem._1.timestamp.getTime))))
 }

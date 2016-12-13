@@ -1,6 +1,6 @@
 package com.DraftChat
 
-import com.DraftChat.servlet.IndexServlet
+import com.DraftChat.servlet.ChatServlet
 import org.scalatra.test.specs2._
 import org.specs2.matcher.MatchResult
 import org.specs2.specification.core.SpecStructure
@@ -11,7 +11,7 @@ class IndexServletSpec extends ScalatraSpec { def is: SpecStructure =
     "should return status 200"                  ! root200^
                                                 end
 
-  addServlet(classOf[IndexServlet], "/*")
+  addServlet(classOf[ChatServlet], "/*")
 
   def root200: MatchResult[Any] = get("/") {
     status must_== 200

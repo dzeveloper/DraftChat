@@ -4,6 +4,7 @@ import java.sql.Timestamp
 import javax.servlet.http.HttpServletRequest
 
 import com.DraftChat.DraftChatStack
+import com.DraftChat.auth.AuthenticationSupport
 import com.DraftChat.json.MessageSerializer
 import com.DraftChat.model.{Message, Messages}
 import com.DraftChat.service.MessageService
@@ -14,8 +15,12 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import spray.json.DefaultJsonProtocol._
 
-class MessagesController extends DraftChatStack {
+class MessagesController extends DraftChatStack with AuthenticationSupport {
   private lazy val db = Database.forConfig("mydb")
+
+  before() {
+    requireLogin()
+  }
 
   def getParameterOrBadRequest(name: String): String =
     params.getOrElse(name, halt(400))

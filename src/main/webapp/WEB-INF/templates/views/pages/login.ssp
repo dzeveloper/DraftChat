@@ -1,5 +1,5 @@
+<%@val errorMessage: String%>
 <!DOCTYPE html>
-<!-- saved from url=(0054)http://bootsnipp-env.elasticbeanstalk.com/iframe/PaMA1 -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="robots" content="noindex">
@@ -25,25 +25,23 @@
 <!-- Main Form -->
 <div class="login-form-1">
 
+#if (!errorMessage.isEmpty)
 <div class="alert alert-warning" id="wrongCredentials" style="display: none">
-Login or password didn't match
+<%=errorMessage%>
 </div>
+#end
 
-<form id="login-form" class="text-left" novalidate="novalidate">
+<form id="login-form" class="text-left" novalidate="novalidate" action="/auth" method="POST">
 <div class="login-form-main-message"></div>
 <div class="main-login-form">
-<div class="login-group">
-    <div class="form-group">
-        <label for="lg_username" class="sr-only">Username</label>
-        <input type="text" class="form-control" id="lg_username" name="lg_username" placeholder="username">
-        </div>
+    <div class="login-group">
         <div class="form-group">
-            <label for="lg_password" class="sr-only">Password</label>
-            <input type="password" class="form-control" id="lg_password" name="lg_password" placeholder="password">
+            <label for="lg_login" class="sr-only">login</label>
+            <input type="text" class="form-control" id="lg_login" name="login" placeholder="username">
             </div>
-            <div class="form-group login-group-checkbox">
-                <input type="checkbox" id="lg_remember" name="lg_remember">
-                    <label for="lg_remember">remember</label>
+            <div class="form-group">
+                <label for="lg_password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="lg_password" name="password" placeholder="password">
                 </div>
             </div>
             <button type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>

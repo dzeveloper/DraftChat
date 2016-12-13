@@ -1,11 +1,12 @@
 package com.DraftChat.servlet
 
 import com.DraftChat.DraftChatStack
+import com.DraftChat.auth.AuthenticationSupport
 
-class IndexServlet extends DraftChatStack {
-  get("/login") {
-    contentType = "text/html"
-    ssp("/WEB-INF/templates/views/pages/login.ssp", "layout" -> "")
+class ChatServlet extends DraftChatStack with AuthenticationSupport {
+
+  before() {
+    requireLogin()
   }
 
   get("/") {
