@@ -1,20 +1,30 @@
 package com.DraftChat.service
 
+import java.sql.Timestamp
+
 import com.DraftChat.model.{Message, Messages, User}
 import slick.driver.PostgresDriver.api._
 
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
+import scala.concurrent.Future
 
-class MessageService {
+object MessageService {
   private val db = Database.forConfig("mydb")
 
-  def getMessagesWithAuthor: Seq[(Message, User)] = {
+  def getMessagesWithAuthor: Future[Seq[(Message, User)]] = {
     val messagesQuery = for {
       message <- TableQuery[Messages]
       author <- message.author
     } yield (message, author)
 
-    Await.result(db.run(messagesQuery.result), Duration.Inf)
+    db.run(messagesQuery.result)
+  }
+
+  def getLastMessagesWithAuthor(timestamp: Timestamp): Future[Seq[(Message, User)]] = {
+    val messagesQuery = for {
+      message <- TableQuery[Messages].filter(_.timestamp > timestamp)
+      author <- message.author
+    } yield (message, author)
+
+    db.run(messagesQuery.result)
   }
 }
