@@ -172,6 +172,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     width: 100%;
+    background: white;
 }
 
 .chat_area li {
@@ -242,4 +243,17 @@
     display: block;
     margin: 0 auto;
     width: 150px;
+}
+
+body {
+    background: url("/img/bg.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#name-report {
+    margin: 8px 0 0 30px;
+    text-decoration: underline;
 }

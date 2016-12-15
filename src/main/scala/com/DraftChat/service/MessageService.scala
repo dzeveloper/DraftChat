@@ -27,4 +27,7 @@ object MessageService {
 
     db.run(messagesQuery.result)
   }
+
+  def addMessage(mes: Message) =
+    db.run(TableQuery[Messages] += mes)
 }

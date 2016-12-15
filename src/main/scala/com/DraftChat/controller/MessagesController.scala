@@ -1,23 +1,19 @@
-package com.DraftChat.servlet
+package com.DraftChat.controller
 
 import java.sql.Timestamp
-import javax.servlet.http.HttpServletRequest
 
 import com.DraftChat.DraftChatStack
 import com.DraftChat.auth.AuthenticationSupport
 import com.DraftChat.json.MessageSerializer
-import com.DraftChat.model.{Message, Messages}
+import com.DraftChat.model.{Message, User}
 import com.DraftChat.service.MessageService
 import org.scalatra.Created
-import slick.driver.PostgresDriver.api._
+import spray.json.DefaultJsonProtocol._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
-import spray.json.DefaultJsonProtocol._
 
 class MessagesController extends DraftChatStack with AuthenticationSupport {
-  private lazy val db = Database.forConfig("mydb")
-
   before() {
     requireLogin()
   }
@@ -26,10 +22,11 @@ class MessagesController extends DraftChatStack with AuthenticationSupport {
     params.getOrElse(name, halt(400))
 
   post("/send") {
-    val authorId = getParameterOrBadRequest("authorId")
+    val author = request("scentry.auth.default.user").asInstanceOf[User]
     val message = getParameterOrBadRequest("message")
-    Await.result(db.run(TableQuery[Messages] += Message(new Timestamp(System.currentTimeMillis()),
-      authorId.toInt, message)), Duration.Inf)
+    Await.result(
+      MessageService.addMessage(Message(new Timestamp(System.currentTimeMillis()), author.id.get, message)),
+      Duration.Inf)
     Created()
   }
 
@@ -40,7 +37,6 @@ class MessagesController extends DraftChatStack with AuthenticationSupport {
 
   get("/last") {
     val timestamp = new Timestamp(getParameterOrBadRequest("timestamp").toLong)
-
     contentType = "application/json"
     MessageSerializer.serialize(Await.result(MessageService.getLastMessagesWithAuthor(timestamp), Duration.Inf)).toJson
   }

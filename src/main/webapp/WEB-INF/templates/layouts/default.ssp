@@ -1,3 +1,4 @@
+<%@val name: String%>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -29,12 +30,12 @@
     </li>
 </script>
 
-<div class="main_section">
+<div class="main_section" id="main">
     <div class="container">
         <div class="chat_container">
             <div class="col-sm-12 message_section">
-                    <div class="row">
-                        <div class="new_message_head">
+                <div class="row">
+                    <div class="new_message_head">
                         <img src="/img/logo.svg" alt="logo" class="logo"/>
                             <%--<div class="pull-right"><div class="dropdown">--%>
                             <%--<button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--%>
@@ -58,6 +59,8 @@
                             <textarea id="message-text" class="form-control" placeholder="type a message"></textarea>
                             <div class="clearfix"></div>
                             <div class="chat_bottom">
+                                <button id="logout-button" class="pull-left btn btn-warning">Log out</button>
+                                <span class="pull-left" id="name-report">You are logged as: <b>${name}</b></span>
                                 <button id="send-button" class="pull-right btn btn-success">Send</button>
                             </div>
                         </div>

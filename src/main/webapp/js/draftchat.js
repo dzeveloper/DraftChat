@@ -58,9 +58,15 @@ $(document).ready(function () {
     $("#send-button").click(function () {
         var messageBlock = $("#message-text");
         if (messageBlock.val()) {
-            $.post('message/send', {message: messageBlock.val(), authorId: "1"}, function () {
+            $.post('message/send', {message: messageBlock.val()}, function () {
                 messageBlock.val('');
             });
         }
+    });
+
+    $("#logout-button").click(function () {
+        $.post('auth/logout', function () {
+            location.replace("/");
+        });
     });
 });
