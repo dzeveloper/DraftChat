@@ -1,10 +1,11 @@
 # DraftChat #
 
 ## Build & Run ##
-
+Configure DB connection in src/main/resources/application.conf
 ```sh
 $ cd DraftChat
 $ sbt
+> initDB
 > jetty:start (or sbt startJetty)
 ```
 

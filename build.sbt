@@ -57,3 +57,7 @@ enablePlugins(JettyPlugin)
 val runJetty = TaskKey[Unit]("runJetty", "Run Jetty")
 
 fullRunTask(runJetty, Compile, "com.DraftChat.JettyLauncher")
+
+val initDB = TaskKey[Unit]("initDB", "Init DB")
+
+fullRunTask(initDB, Compile, "com.DraftChat.Init")
