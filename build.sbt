@@ -61,3 +61,5 @@ fullRunTask(runJetty, Compile, "com.DraftChat.JettyLauncher")
 val initDB = TaskKey[Unit]("initDB", "Init DB")
 
 fullRunTask(initDB, Compile, "com.DraftChat.Init")
+
+flywayUrl := "jdbc:postgresql://localhost/DraftChat?user=app&password=root"
